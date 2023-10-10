@@ -25,10 +25,6 @@ const getContactById = async (req, res, next) => {
 
 const add = async (req, res, next) => {
   try {
-    // const { error } = schema.validate(req.body);
-    // if (error) {
-    //   throw HttpError(400, error.message);
-    // }
     const result = await Contact.create(req.body);
     res.status(201).json(result);
   } catch (error) {
@@ -48,8 +44,6 @@ const removeContact = async (req, res, next) => {
 };
 const update = async (req, res, next) => {
   try {
-    const { error } = schema.validate(req.body);
-    if (error) HttpError(400, error.message);
     const { id } = req.params;
       const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
       console.log(result);
@@ -62,8 +56,6 @@ const update = async (req, res, next) => {
 
 const updateFavorite = async (req, res, next) => {
   try {
-    // const { error } = favoriteSchema.validate(req.body);
-    // if (error) throw HttpError(400, error.message);
     const { id } = req.params;
       const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
       if (!result)  throw HttpError(404, "Contact Not Found")
