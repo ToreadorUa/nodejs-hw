@@ -11,7 +11,7 @@ const getAll = async (req, res, next) => {
     if (favorite) {
       result = await Contact.find({owner:_id, favorite: "true" }, "", { skip, limit });
     } else {
-      result = await Contact.find({}, "", { skip, limit });
+      result = await Contact.find({owner:_id}, "", { skip, limit });
     }
     res.json(result);
   } catch (error) {
