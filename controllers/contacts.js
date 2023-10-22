@@ -1,6 +1,4 @@
-const contacts = require("../models/contacts.js");
 const HttpError = require("../helpers/HttpError");
-const { schema, favoriteSchema } = require("../models/contacts.js");
 const { Contact } = require("../models/contacts.js");
 
 const getAll = async (req, res, next) => {
@@ -13,7 +11,7 @@ const getAll = async (req, res, next) => {
     if (favorite) {
       result = await Contact.find({owner:_id, favorite: "true" }, "", { skip, limit });
     } else {
-      result = await Contact.find({owner:_id}, "", { skip, limit });
+      result = await Contact.find({}, "", { skip, limit });
     }
     res.json(result);
   } catch (error) {

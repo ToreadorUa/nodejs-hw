@@ -3,7 +3,6 @@ const { User } = require("../models/auth");
 const bcrypt = require("bcrypt");
 const ctrlWrapper = require("../helpers/ctrlWrapper");
 const jwt = require("jsonwebtoken");
-const { trusted } = require("mongoose");
 
 const { SECRET_KEY } = process.env;
 
@@ -54,6 +53,7 @@ const current = (req, res, next) => {
 
 const updateSub = async (req, res, next) => {
   const { _id } = req.user;
+  const { subscription } = req.body;
   const subArray = ['starter', 'pro', 'business']
   if (!subArray.includes(subscription)) HttpError(400, "Bad request")
   const user= await User.findByIdAndUpdate(_id, req.body, {new:true})
