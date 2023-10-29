@@ -23,6 +23,10 @@ const userSchema = new Schema({
     type: String,
     default: null,
   },
+  avatar: {
+    avatarURL: String,
+    
+  }
 });
 
 userSchema.post("save", handleMongooseError);

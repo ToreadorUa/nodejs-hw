@@ -13,6 +13,7 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 app.use(logger(formatsLogger))
 app.use(cors())                   // middleware for correct request from other address to web server
 app.use(express.json())           // check all requests body, if its JSON - change to object
+app.use(express.static('public'));
 
 app.use('/api/contacts', contactsRouter) // any request from 'api/contacts' will do in 'contactsRouter'
 app.use('/api/auth', authRouter) 
