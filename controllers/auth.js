@@ -3,14 +3,8 @@ const { User } = require("../models/auth");
 const bcrypt = require("bcrypt");
 const ctrlWrapper = require("../helpers/ctrlWrapper");
 const jwt = require("jsonwebtoken");
-const gravatar = require('gravatar');
-const path = require('path')
-const fs = require('fs/promises')
-const Jimp = require('jimp')
 
 const { SECRET_KEY } = process.env;
-
-const destPath = path.join(__dirname,'../', 'public', 'avatars')
 
 const register = async (req, res, next) => {
   const { email, password } = req.body;
@@ -19,9 +13,7 @@ const register = async (req, res, next) => {
     throw HttpError(409, "Email already in use");
   }
   const passHash = await bcrypt.hash(password, 10);
-  const avatarURL = gravatar.url(email);
-  console.log(avatarURL);
-  const newUser = await User.create({ ...req.body, password: passHash, avatarURL });
+  const newUser = await User.create({ ...req.body, password: passHash });
   res.status(201).json({
     email: newUser.email,
   });
@@ -66,25 +58,12 @@ const updateSub = async (req, res, next) => {
   if (!subArray.includes(subscription)) HttpError(400, "Bad request")
   const user= await User.findByIdAndUpdate(_id, req.body, {new:true})
   res.json(user)
-}
 
-const updAvatar= async(req, res, next) => {
-  const { _id } = req.user;
-  const { path: tempUpload, originalname } = req.file; 
-  const img = await Jimp.read(tempUpload)
-  img.resize(250, 250);
-  const filename = `${_id}-${originalname}`;
-  const resultUpload = path.join(destPath, filename);
-  await fs.rename(tempUpload, resultUpload);
-  const avatarURL = path.join("avatars", filename)
-  await User.findByIdAndUpdate(_id, { avatarURL });
-  res.json({avatarURL})
 }
 
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   current: ctrlWrapper(current),
-  updateSub: ctrlWrapper(updateSub),
-  updAvatar:ctrlWrapper(updAvatar),
+  updateSub:ctrlWrapper(updateSub),
 };
