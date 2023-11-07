@@ -26,6 +26,14 @@ const userSchema = new Schema({
   avatar: {
     avatarURL: String,
     
+  },
+  verify: {
+    type: Boolean,
+    default: false
+  },
+  verifyCode: {
+    type: String,
+    default: '',
   }
 });
 
@@ -37,6 +45,10 @@ const registerSchema = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
+const emailSchema = Joi.object({
+  email: Joi.string().pattern(regexEmail).required(),
+})
+
 const loginSchema = Joi.object({
   email: Joi.string().pattern(regexEmail).required(),
   password: Joi.string().min(6).required(),
@@ -44,4 +56,4 @@ const loginSchema = Joi.object({
 
 const User = model("user", userSchema);
 
-module.exports = { User, registerSchema, loginSchema };
+module.exports = { User, registerSchema, loginSchema, emailSchema };
